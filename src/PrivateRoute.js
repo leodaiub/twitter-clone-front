@@ -1,17 +1,17 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
-import { checkCookie } from "./utils/cookies";
+import store from "store";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={(props) =>
-      checkCookie() !== null ? (
+      store.get("token") !== null ? (
         <Component {...props} />
       ) : (
         <Redirect
           to={{
-            pathname: "/",
+            pathname: "/login",
             state: { from: props.location },
           }}
         />

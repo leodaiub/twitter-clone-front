@@ -1,12 +1,44 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 
 import { loginUserAction } from "../store/actions";
-import { setCookie } from "../utils/cookies";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import { Paper } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: 50,
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
 
 export const SignIn = (props) => {
+  const classes = useStyles();
+  const [error, setError] = useState("");
+
   const onHandleLogin = (event) => {
     event.preventDefault();
 
@@ -21,35 +53,65 @@ export const SignIn = (props) => {
     props.dispatch(loginUserAction(data));
   };
 
-  let isSuccess, message;
+  if (props.authenticated) return <Redirect to="/" />;
 
-  if (props.response.login.hasOwnProperty("response")) {
-    isSuccess = props.response.login.response.success;
-    message = props.response.login.response.message;
-
-    if (isSuccess) {
-      setCookie("token", props.response.login.response.token, 1);
-    }
-  }
   return (
-    <div>
-      <h3>Login Page</h3>
-      {!isSuccess ? <div>{message}</div> : <Redirect to="dashboard" />}
-      <form onSubmit={onHandleLogin}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input type="email" name="email" id="email" />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input type="password" name="password" id="password" />
-        </div>
-        <div>
-          <button>Login</button>
-        </div>
-      </form>
-      Don't have account? <Link to="register">Register here</Link>
-    </div>
+    <Container component="main" maxWidth="xs">
+      <Paper className={classes.paper}>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <form className={classes.form} noValidate onSubmit={onHandleLogin}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+          />
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Sign In
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href="#" variant="body2">
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link href="#" variant="body2">
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
+        </form>
+      </Paper>
+    </Container>
   );
 };
 
@@ -57,7 +119,10 @@ SignIn.propTypes = {
   prop: PropTypes,
 };
 
-const mapStateToProps = (response) => ({ response });
+const mapStateToProps = (state) => ({
+  authenticated: state.login.authenticated,
+  error: state.login.error,
+});
 
 // const mapDispatchToProps = {};
 
