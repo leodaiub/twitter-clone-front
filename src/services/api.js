@@ -1,7 +1,7 @@
 import axios from "axios";
 import store from "store";
 
-const api = axios.create({ baseURL: "http://localhost:3333/" });
+const api = axios.create({ baseURL: process.env.API_URL });
 
 api.interceptors.request.use((config) => {
   if (!!store.get("token"))
