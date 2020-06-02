@@ -6,7 +6,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={(props) =>
-      store.get("token") !== null ? (
+      !!store.get("token") ? (
         <Component {...props} />
       ) : (
         <Redirect

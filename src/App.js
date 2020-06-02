@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-
 import PrivateRoute from "./PrivateRoute";
 import LoginPage from "./pages/SignIn";
 import RegisterPage from "./pages/SignUp";
-import Tweets from "./pages/Tweets";
+import Posts from "./pages/Posts";
 import Profile from "./pages/Profile";
 import { connect } from "react-redux";
 
@@ -15,7 +14,7 @@ class App extends Component {
         <Switch>
           <Route path="/login" component={LoginPage} />
           <Route path="/register" component={RegisterPage} />
-          <PrivateRoute path="/" exact={true} component={Tweets} />
+          <PrivateRoute path="/" exact={true} component={Posts} />
           <PrivateRoute path="/profile" exact={true} component={Profile} />
           <PrivateRoute path="/profile/edit" exact={true} component={""} />
         </Switch>

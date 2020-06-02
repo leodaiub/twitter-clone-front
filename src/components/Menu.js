@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -9,6 +9,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menus from "@material-ui/core/Menu";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   "@global": {
@@ -29,14 +30,17 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
   },
+  logo: {
+    marginRight: theme.spacing(1),
+    fill: "#fff",
+  },
 }));
 
-const Menu = (props) => {
+const Menu = ({ logout }) => {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
+  const [auth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -51,15 +55,16 @@ const Menu = (props) => {
           <Typography variant="h6" className={classes.title} color="primary">
             <Link className={classes.title} to="/">
               <img
-                src={process.env.PUBLIC_URL + "/icons8-twitter.svg"}
-                width="50"
-                height="50"
+                src={require("../assets/img/facebook.svg")}
+                width="30"
+                height="30"
                 alt="twitter logo"
+                className={classes.logo}
               />
-              Twitter Clone
+              Fakebook
             </Link>
           </Typography>
-          {auth && (
+          {auth ? (
             <div>
               <IconButton
                 aria-label="account of current user"
@@ -87,12 +92,14 @@ const Menu = (props) => {
                 }}
                 className={classes.popup}
               >
-                <MenuItem onClick={handleClose}>
-                  <Link to="profile">Profile</Link>
-                </MenuItem>
-                <MenuItem onClick={handleClose}>Log out</MenuItem>
+                <Link to="profile">
+                  <MenuItem onClick={handleClose}>Profile</MenuItem>
+                </Link>
+                <MenuItem onClick={() => logout()}>Log out</MenuItem>
               </Menus>
             </div>
+          ) : (
+            <div></div>
           )}
         </Toolbar>
       </AppBar>
@@ -102,4 +109,15 @@ const Menu = (props) => {
 
 Menu.propTypes = {};
 
-export default Menu;
+const mapStateToProps = (state) => ({
+  user: state.user.user,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  logout: () =>
+    dispatch({
+      type: "LOGOUT_USER",
+    }),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);

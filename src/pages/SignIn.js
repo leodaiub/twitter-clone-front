@@ -1,26 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
+import Alert from "@material-ui/lab/Alert";
 
 import { loginUserAction } from "../store/actions";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
 import { Paper } from "@material-ui/core";
+import bgImage from "../assets/img/thomas-schutze-tT1nmw2gqEI-unsplash.jpg";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    height: "100vh",
+    color: "#f3f3f3",
+  },
+  image: {
+    backgroundImage: `url(${bgImage})`,
+    backgroundRepeat: "no-repeat",
+    backgroundColor:
+      theme.palette.type === "light"
+        ? theme.palette.grey[50]
+        : theme.palette.grey[900],
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
   paper: {
-    marginTop: theme.spacing(8),
+    width: "100%",
+    margin: theme.spacing(8, 4),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: 50,
+    justifyContent: "center",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -37,7 +51,6 @@ const useStyles = makeStyles((theme) => ({
 
 export const SignIn = (props) => {
   const classes = useStyles();
-  const [error, setError] = useState("");
 
   const onHandleLogin = (event) => {
     event.preventDefault();
@@ -56,62 +69,86 @@ export const SignIn = (props) => {
   if (props.authenticated) return <Redirect to="/" />;
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Paper className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          Sign in
+    <Grid container component="main" className={classes.root}>
+      <Grid
+        item
+        xs={false}
+        sm={4}
+        md={7}
+        className={classes.image}
+        container
+        justify="center"
+        alignItems="center"
+        direction="column"
+      >
+        <Typography variant="h3">Fakebook</Typography>
+
+        <Typography variant="h5">
+          A Facebook's clone made for portfolio purposes.
         </Typography>
-        <form className={classes.form} noValidate onSubmit={onHandleLogin}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        sm={8}
+        md={5}
+        component={Paper}
+        elevation={6}
+        square
+        container
+      >
+        <div className={classes.paper}>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <form className={classes.form} onSubmit={onHandleLogin}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            {props.error && (
+              <Alert severity="error">
+                Error! check your information and try again.
+              </Alert>
+            )}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item>
+                <Link to="/register" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </Paper>
-    </Container>
+          </form>
+        </div>
+      </Grid>
+    </Grid>
   );
 };
 

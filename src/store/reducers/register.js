@@ -15,9 +15,10 @@ export default function (state = initialState, action) {
         ...state,
         loading: false,
         success: true,
+        error: null,
       };
     case types.REGISTER_USER_ERROR:
-      return { ...state, error: action.payload.data.error, loading: false };
+      return { ...state, error: action.payload.message, loading: false };
     default:
       return state;
   }
