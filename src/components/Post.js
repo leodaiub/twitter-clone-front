@@ -16,7 +16,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import LikeIcon from "@material-ui/icons/ThumbUp";
-import ShareIcon from "@material-ui/icons/Share";
+// import ShareIcon from "@material-ui/icons/Share";
 import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -64,13 +64,21 @@ export default function Tweet({
   postComment,
   comments,
   likes,
-  shares,
+  // shares,
   likePost,
-  sharePost,
+  user,
+  unlikePost,
 }) {
   const [showComments, toggleShowComments] = useState(false);
   const [commentsLength, addCommentsLength] = useState(5);
   const classes = useStyles();
+
+  const didThisUserLikeThePost = () => {
+    const userLike = likes.filter((like) => like.user_id === user.id);
+
+    return userLike;
+  };
+
   return (
     <Card className={classes.root}>
       <CardHeader
@@ -104,7 +112,7 @@ export default function Tweet({
           {" "}
           {comments.length} comments
         </Typography>
-        <Typography variant="caption"> {shares.length} shares</Typography>
+        {/* <Typography variant="caption"> {shares.length} shares</Typography> */}
       </CardActions>
       <Divider />
       <CardActions disableSpacing>
@@ -116,11 +124,21 @@ export default function Tweet({
           aria-label="text primary button group"
           style={{ margin: 0 }}
         >
-          <Button size="small" onClick={() => likePost(data.id)}>
+          <Button
+            size="small"
+            onClick={
+              didThisUserLikeThePost().length === 0
+                ? () => likePost(data.id)
+                : () => unlikePost(didThisUserLikeThePost()[0].id)
+            }
+            color={
+              didThisUserLikeThePost().length === 0 ? "primary" : "secondary"
+            }
+          >
             <IconButton size="small" aria-label="delete">
               <LikeIcon />
             </IconButton>{" "}
-            Like
+            {didThisUserLikeThePost().length === 0 ? "LIKE" : "UNLIKE"}
           </Button>
           <Button
             size="small"
@@ -131,12 +149,12 @@ export default function Tweet({
             </IconButton>{" "}
             Comment
           </Button>
-          <Button size="small" onClick={() => sharePost(data.content, data.id)}>
+          {/* <Button size="small" onClick={() => sharePost(data.content, data.id)}>
             <IconButton size="small" aria-label="delete">
               <ShareIcon />
             </IconButton>{" "}
             Share
-          </Button>
+          </Button> */}
         </ButtonGroup>
       </CardActions>
       {showComments && (

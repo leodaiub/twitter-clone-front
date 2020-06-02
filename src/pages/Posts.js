@@ -37,12 +37,13 @@ export const Posts = ({
   postComment,
   comments,
   getComments,
-  sharePost,
+  // sharePost,
   likePost,
   getLikes,
-  getShares,
+  // shares,
   likes,
-  shares,
+  unlikePost,
+  getUser,
 }) => {
   const classes = useStyles();
 
@@ -50,16 +51,18 @@ export const Posts = ({
     posts.length === 0 && getPosts();
     comments.length === 0 && getComments();
     likes.length === 0 && getLikes();
-    shares.length === 0 && getShares();
+    !user.username && getUser();
+    // shares.length === 0 && getShares();
   }, [
     comments.length,
     getComments,
     getLikes,
     getPosts,
-    getShares,
+    getUser,
     likes.length,
     posts.length,
-    shares.length,
+    user.username,
+    // shares.length,
   ]);
 
   return (
@@ -78,9 +81,11 @@ export const Posts = ({
                     (comment) => comment.post_id === tweet.id
                   )}
                   likes={likes.filter((like) => like.post_id === tweet.id)}
-                  shares={shares.filter((share) => share.post_id === tweet.id)}
                   likePost={likePost}
-                  sharePost={sharePost}
+                  // sharePost={sharePost}
+                  unlikePost={unlikePost}
+                  // shares={shares.filter((share) => share.post_id === tweet.id)}
+                  user={user}
                 />
               </div>
             ))}
@@ -107,7 +112,7 @@ const mapStateToProps = (state) => ({
   posts: state.posts.posts,
   comments: state.posts.comments,
   likes: state.posts.likes,
-  shares: state.posts.shares,
+  // shares: state.posts.shares,
   total: state.posts.total,
   perPage: state.posts.perPage,
   page: state.posts.page,
@@ -130,11 +135,11 @@ const mapDispatchToProps = (dispatch) => ({
       type: "GET_LIKE_POST",
       payload: page,
     }),
-  getShares: (page) =>
-    dispatch({
-      type: "GET_SHARE_POST",
-      payload: page,
-    }),
+  // getShares: (page) =>
+  //   dispatch({
+  //     type: "GET_SHARE_POST",
+  //     payload: page,
+  //   }),
   postTweet: (content) =>
     dispatch({
       type: "POST_POST",
@@ -150,11 +155,20 @@ const mapDispatchToProps = (dispatch) => ({
       type: "LIKE_POST",
       payload: { id },
     }),
-  sharePost: (content, id) =>
+  unlikePost: (id) =>
     dispatch({
-      type: "SHARE_POST",
-      payload: { content, id },
+      type: "UNLIKE_POST",
+      payload: { id },
     }),
+  getUser: () =>
+    dispatch({
+      type: "REQUEST_USER",
+    }),
+  // sharePost: (content, id) =>
+  //   dispatch({
+  //     type: "SHARE_POST",
+  //     payload: { content, id },
+  //   }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Posts);

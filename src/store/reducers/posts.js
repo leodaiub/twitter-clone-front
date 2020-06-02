@@ -5,7 +5,7 @@ const initialState = {
   total: 42,
   comments: [],
   likes: [],
-  shares: [],
+  // shares: [],
   perPage: 20,
   page: 1,
   lastPage: 3,
@@ -63,24 +63,33 @@ export default (state = initialState, { type, payload }) => {
       return { ...state, likes: [payload, ...state.likes] };
     case types.LIKE_POST_ERROR:
       return { ...state, error: true };
+    case types.UNLIKE_POST:
+      return { ...state, loading: true };
+    case types.UNLIKE_POST_SUCCESS:
+      return {
+        ...state,
+        likes: state.likes.filter((like) => like.id !== payload.id),
+      };
+    case types.UNLIKE_POST_ERROR:
+      return { ...state, error: true };
     case types.GET_LIKE_POST:
       return { ...state, loading: true };
     case types.GET_LIKE_POST_SUCCESS:
       return { ...state, likes: payload };
     case types.GET_LIKE_POST_ERROR:
       return { ...state, error: true };
-    case types.SHARE_POST:
-      return { ...state, loading: true };
-    case types.SHARE_POST_SUCCESS:
-      return { ...state, shares: [payload, ...state.shares] };
-    case types.SHARE_POST_ERROR:
-      return { ...state, error: true };
-    case types.GET_SHARE_POST:
-      return { ...state, loading: true };
-    case types.GET_SHARE_POST_SUCCESS:
-      return { ...state, shares: payload };
-    case types.GET_SHARE_POST_ERROR:
-      return { ...state, error: true };
+    // case types.SHARE_POST:
+    //   return { ...state, loading: true };
+    // case types.SHARE_POST_SUCCESS:
+    //   return { ...state, shares: [payload, ...state.shares] };
+    // case types.SHARE_POST_ERROR:
+    //   return { ...state, error: true };
+    // case types.GET_SHARE_POST:
+    //   return { ...state, loading: true };
+    // case types.GET_SHARE_POST_SUCCESS:
+    //   return { ...state, shares: payload };
+    // case types.GET_SHARE_POST_ERROR:
+    //   return { ...state, error: true };
     default:
       return state;
   }
