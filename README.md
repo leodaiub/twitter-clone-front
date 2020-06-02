@@ -2,6 +2,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/215844e30ca44d60a7ad582eb15f1242)](https://app.codacy.com/manual/leodaiub/twitter-clone-front?utm_source=github.com&utm_medium=referral&utm_content=leodaiub/twitter-clone-front&utm_campaign=Badge_Grade_Dashboard)
+
 In the project directory, you can run:
 
 ### `npm start`
