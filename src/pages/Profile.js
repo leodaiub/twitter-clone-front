@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
-import { Container, Paper, Grid } from "@material-ui/core";
+import { Container, Paper, Grid, FormLabel, Avatar } from "@material-ui/core";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -12,17 +12,17 @@ import Menu from "../components/Menu.js";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    height: "100vh",
+  },
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(2),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     padding: 50,
   },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
+
   form: {
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(3),
@@ -36,32 +36,36 @@ const useStyles = makeStyles((theme) => ({
   input: {
     display: "none",
   },
+  avatar: {
+    height: 150,
+    width: 150,
+  },
 }));
 
-export const Profile = ({ user }) => {
+export const Profile = ({ user, getUser, updateUser }) => {
   const classes = useStyles();
-  const [editing, setEditing] = useState(false);
+  const [username, setUsername] = useState("");
 
-  // const onHandleRegistration = (event) => {
-  //   event.preventDefault();
+  useEffect(() => {
+    !user.username && getUser();
+    setUsername(user.username);
+  }, [user.username, getUser]);
 
-  //   let username = event.target.username.value;
-  //   let email = event.target.email.value;
-  //   let password = event.target.password.value;
+  const handleUpdate = (event) => {
+    event.preventDefault();
 
-  //   const data = {
-  //     username,
-  //     email,
-  //     password,
-  //   };
+    let username = event.target.username.value;
+    let profile_img = event.target.profile_img?.files[0];
+    const data = new FormData();
+    data.append("profile_img", profile_img);
+    data.append("id", user.id);
+    data.append("username", username);
 
-  //   props.dispatch(registerUserAction(data));
-  // };
-
-  // if (props.success) return <Redirect to="login" />;
+    updateUser(data);
+  };
 
   return (
-    <div>
+    <div className={classes.root}>
       <Menu user={user} />
       <Container component="main" maxWidth="sm">
         <Paper
@@ -73,57 +77,77 @@ export const Profile = ({ user }) => {
           <Typography component="h1" variant="h5">
             Profile
           </Typography>
-          <form
-            className={classes.form}
-            noValidate
-            //onSubmit={onHandleRegistration}
-          >
+          <form className={classes.form} noValidate onSubmit={handleUpdate}>
             <Grid item xs={12} container justify="center">
-              {/* //{user.prof} */}
-              <input
-                accept="image/*"
-                className={classes.input}
-                id="contained-button-file"
-                type="file"
-                disabled={!editing}
-              />
-              <label htmlFor="contained-button-file">
-                <Button
-                  disabled={!editing}
-                  size="large"
-                  raised
-                  component="span"
-                  variant="contained"
-                  color="default"
-                  className={classes.button}
-                  startIcon={<CloudUploadIcon />}
-                >
-                  Upload
-                </Button>
-              </label>
+              {!user.profile_img ? (
+                <div>
+                  {" "}
+                  <input
+                    accept="image/*"
+                    className={classes.input}
+                    id="contained-button-file"
+                    name="profile_img"
+                    type="file"
+                  />
+                  <label htmlFor="contained-button-file">
+                    <FormLabel> Profile Picture:</FormLabel>
+                    <Button
+                      size="large"
+                      raised
+                      component="span"
+                      variant="contained"
+                      color="default"
+                      className={classes.button}
+                      startIcon={<CloudUploadIcon />}
+                    >
+                      Upload
+                    </Button>
+                  </label>
+                </div>
+              ) : (
+                <Avatar
+                  src={user.profile_img}
+                  className={classes.avatar}
+                ></Avatar>
+              )}
             </Grid>
 
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
+                <FormLabel>Username:</FormLabel>
                 <TextField
-                  disabled={!editing}
+                  value={username}
                   variant="outlined"
                   required
                   fullWidth
                   id="username"
-                  label="Username"
                   name="username"
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </Grid>
+            </Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <FormLabel>Email:</FormLabel>
+                <TextField
+                  value={user.email}
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="email"
+                  name="email"
+                  disabled
                 />
               </Grid>
             </Grid>
             <Button
-              onClick={editing ? null : () => setEditing(true)}
+              type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
             >
-              {!editing ? "EDIT" : "SAVE"}
+              EDIT
             </Button>
           </form>
         </Paper>
@@ -145,9 +169,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch({
       type: "REQUEST_USER",
     }),
-  updateUser: () =>
+  updateUser: (payload) =>
     dispatch({
       type: "UPDATE_USER",
+      payload,
     }),
 });
 

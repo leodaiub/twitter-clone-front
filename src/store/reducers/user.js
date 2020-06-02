@@ -18,7 +18,7 @@ export default (state = initialState, { type, payload }) => {
     case types.UPDATE_USER:
       return { ...state, loading: true };
     case types.UPDATE_USER_SUCCESS:
-      return { ...state, tweets: [payload, ...state.tweets] };
+      return { ...state, user: payload };
     case types.UPDATE_USER_ERROR:
       return { ...state, error: true };
     default:

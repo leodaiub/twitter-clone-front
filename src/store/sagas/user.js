@@ -13,8 +13,9 @@ export function* getUser({ payload }) {
 
 export function* updateUser({ payload }) {
   try {
-    const response = yield call(api.put, "users", payload);
+    const response = yield call(api.put, `users/${payload.get("id")}`, payload);
     yield put({ type: types.UPDATE_USER_SUCCESS, payload: response.data });
+    window.location.href = "/";
   } catch (error) {
     yield put({ type: types.UPDATE_USER_ERROR, error });
   }
