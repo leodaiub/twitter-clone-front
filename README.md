@@ -1,4 +1,7 @@
 # Fakebook App.
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/215844e30ca44d60a7ad582eb15f1242)](https://app.codacy.com/manual/leodaiub/twitter-clone-front?utm_source=github.com&utm_medium=referral&utm_content=leodaiub/twitter-clone-front&utm_campaign=Badge_Grade_Dashboard)
+
 Front-End for social media application developed for portfolio purposes, you can check the code for the back-end here: https://github.com/leodaiub/fakebook-api.
 
 ## Tech Stack:
