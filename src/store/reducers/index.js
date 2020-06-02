@@ -1,13 +1,13 @@
 import { combineReducers } from "redux";
 import register from "./register";
 import login from "./login";
-import tweets from "./tweets";
+import posts from "./posts";
 import user from "./user";
 
 const rootReducer = combineReducers({
   register,
   login,
-  tweets,
+  posts,
   user,
 });
 

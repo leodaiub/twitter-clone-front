@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
-import { Container, Paper, Grid, Divider, Link } from "@material-ui/core";
+import { Container, Paper, Grid } from "@material-ui/core";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -79,14 +79,17 @@ export const Profile = ({ user }) => {
             //onSubmit={onHandleRegistration}
           >
             <Grid item xs={12} container justify="center">
+              {/* //{user.prof} */}
               <input
                 accept="image/*"
                 className={classes.input}
                 id="contained-button-file"
                 type="file"
+                disabled={!editing}
               />
               <label htmlFor="contained-button-file">
                 <Button
+                  disabled={!editing}
                   size="large"
                   raised
                   component="span"
@@ -103,6 +106,7 @@ export const Profile = ({ user }) => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
                 <TextField
+                  disabled={!editing}
                   variant="outlined"
                   required
                   fullWidth
