@@ -1,5 +1,5 @@
 # Fakebook App.
-## Front-End for social media application developed for portfolio purposes, you can check the code for the back-end here: https://github.com/leodaiub/fakebook-api.
+Front-End for social media application developed for portfolio purposes, you can check the code for the back-end here: https://github.com/leodaiub/fakebook-api.
 
 ## Tech Stack:
 * React.js.
