@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -51,7 +51,7 @@ const NewTweet = (props) => {
           color="primary"
           className={classes.submit}
         >
-          Post Tweet
+          Post
         </Button>
       </form>
     </Paper>
